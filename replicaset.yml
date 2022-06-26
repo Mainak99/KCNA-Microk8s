@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: sinatra-rs
+  labels:
+    name: sinatra-rs
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      name: sinatra
+  template:
+    metadata:
+      labels:
+        name: sinatra
+    spec:
+      containers:
+      - name: sinatra
+        image: public.ecr.aws/e6n9d7h8/sinatra-example:latest

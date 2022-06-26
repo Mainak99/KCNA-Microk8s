@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sinatra-with-storage
+  labels:
+    app.kubernetes.io/name: sinatra-w-pv
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: sinatra-w-pv
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: sinatra-w-pv
+    spec:
+      volumes:
+      - name: my-pvc
+        persistentVolumeClaim:
+          claimName: my-pvc
+      containers:
+      - name: sinatra-w-pv
+        image: public.ecr.aws/e6n9d7h8/sinatra-example:latest
+        imagePullPolicy: Always
+        volumeMounts:
+          - mountPath: "/mnt/local-data"
+            name: my-pvc
+        ports:
+        - containerPort: 4567
+          name: http
+          protocol: TCP
+        readinessProbe:
+          httpGet:  
+            path: /
+            port: 4567
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 2

@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-nodeport
+spec:
+  type: NodePort
+  selector:
+    app.kubernetes.io/name: sinatra
+  ports:
+    # The port number that resources within the cluster will use to communicate 
+    - port: 8080
+    
+    # The port number the container is listening on
+      targetPort: 4567
+      
+    # The external port to connect to the node.
+      nodePort: 30001
